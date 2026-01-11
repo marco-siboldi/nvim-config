@@ -10,12 +10,16 @@ return {
       local dap = require("dap")
 
       -- Configurar adaptador codelldb (C/C++/Rust)
+      local codelldb_path = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb"
+      if vim.fn.has("win32") == 1 then
+        codelldb_path = codelldb_path .. ".exe"
+      end
+      
       dap.adapters.codelldb = {
         type = "server",
         port = "${port}",
         executable = {
-          -- Mason instala codelldb en diferentes ubicaciones según el OS
-          command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+          command = codelldb_path,
           args = { "--port", "${port}" },
         },
       }
@@ -36,10 +40,14 @@ return {
       dap.configurations.rust = dap.configurations.c
 
       -- Configurar adaptador debugpy (Python)
+      local debugpy_python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+      if vim.fn.has("win32") == 1 then
+        debugpy_python = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/Scripts/python.exe"
+      end
+      
       dap.adapters.python = {
         type = "executable",
-        -- Mason instala debugpy en diferentes ubicaciones según el OS
-        command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
+        command = debugpy_python,
         args = { "-m", "debugpy.adapter" },
       }
 
@@ -50,7 +58,15 @@ return {
           name = "Launch file",
           program = "${file}",
           pythonPath = function()
-            return "/usr/bin/python3"
+            -- Usar el python del venv si existe, sino buscar en PATH
+            local cwd = vim.fn.getcwd()
+            if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+              return cwd .. "/venv/bin/python"
+            elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+              return cwd .. "/.venv/bin/python"
+            else
+              return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
+            end
           end,
         },
       }
