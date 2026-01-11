@@ -20,6 +20,8 @@ return {
           "bashls",
           "jsonls",
           "yamlls",
+          "cmake",
+          "jdtls",
         },
         automatic_installation = true,
       })
