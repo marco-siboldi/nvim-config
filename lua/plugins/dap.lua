@@ -60,13 +60,22 @@ return {
           pythonPath = function()
             -- Usar el python del venv si existe, sino buscar en PATH
             local cwd = vim.fn.getcwd()
-            if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-              return cwd .. "/venv/bin/python"
-            elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-              return cwd .. "/.venv/bin/python"
+            if vim.fn.has("win32") == 1 then
+              -- Windows usa Scripts/ en vez de bin/
+              if vim.fn.executable(cwd .. "/venv/Scripts/python.exe") == 1 then
+                return cwd .. "/venv/Scripts/python.exe"
+              elseif vim.fn.executable(cwd .. "/.venv/Scripts/python.exe") == 1 then
+                return cwd .. "/.venv/Scripts/python.exe"
+              end
             else
-              return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
+              -- Unix/Linux usa bin/
+              if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+                return cwd .. "/venv/bin/python"
+              elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+                return cwd .. "/.venv/bin/python"
+              end
             end
+            return vim.fn.exepath("python3") or vim.fn.exepath("python") or "python"
           end,
         },
       }
