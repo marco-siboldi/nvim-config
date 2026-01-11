@@ -9,6 +9,7 @@ return {
       "lua", "python", "javascript", "typescript", "rust",
       "c", "cpp", "bash", "json", "yaml", "toml",
       "html", "css", "markdown", "markdown_inline",
+      "cmake", "java",
     },
     sync_install = false,
     auto_install = true,

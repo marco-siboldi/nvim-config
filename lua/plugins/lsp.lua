@@ -3,13 +3,18 @@ return {
   dependencies = {
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    -- "hrsh7th/cmp-nvim-lsp", -- opcional si usas nvim-cmp
+    "hrsh7th/cmp-nvim-lsp",
   },
   config = function()
     -- Init mason
     pcall(require, "mason")
     pcall(require, "mason-lspconfig")
 
+    -- Obtener on_attach de keymaps.lua
+    local keymaps = require("config.keymaps")
+    local on_attach = keymaps.lsp_on_attach
+
+    -- Capacidades mejoradas de nvim-cmp
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     pcall(function()
       capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
@@ -21,6 +26,7 @@ return {
       cmd = { "clangd", "--background-index", "--fallback-style=llvm" },
       filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
       capabilities = capabilities,
+      on_attach = on_attach,
       single_file_support = true,
       root_dir = function(fname)
         return vim.fs.root(fname, {
@@ -58,6 +64,8 @@ return {
     vim.lsp.config("bashls", { capabilities = capabilities })
     vim.lsp.config("jsonls", { capabilities = capabilities })
     vim.lsp.config("yamlls", { capabilities = capabilities })
+    vim.lsp.config("neocmake", { capabilities = capabilities })
+    -- Preparación para jdtls (se configurará manualmente después)
 
     vim.lsp.enable("lua_ls")
     vim.lsp.enable("pyright")
@@ -66,5 +74,6 @@ return {
     vim.lsp.enable("bashls")
     vim.lsp.enable("jsonls")
     vim.lsp.enable("yamlls")
+    vim.lsp.enable("neocmake")
   end,
 }
