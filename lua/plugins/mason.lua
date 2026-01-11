@@ -20,6 +20,8 @@ return {
           "bashls",
           "jsonls",
           "yamlls",
+          "cmake",        -- CMake Language Server
+          "jdtls",        -- Java Language Server
         },
         automatic_installation = true,
       })
