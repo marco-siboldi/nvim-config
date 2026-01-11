@@ -36,12 +36,13 @@ return {
     -- Formatear al guardar (esto se puede deshabilitar si se prefiere manual)
     format_on_save = function(bufnr)
       -- Deshabilita autoformat en ciertos filetypes si es necesario
+      -- Ejemplo: local disable_filetypes = { "sql", "java" }
       local disable_filetypes = { }
       local filetype = vim.bo[bufnr].filetype
       if vim.tbl_contains(disable_filetypes, filetype) then
         return
       end
-      
+
       return {
         timeout_ms = 500,
         lsp_fallback = true,

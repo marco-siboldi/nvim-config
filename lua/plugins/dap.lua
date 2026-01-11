@@ -68,9 +68,11 @@ return {
         port = "${port}",
         executable = {
           -- Intenta encontrar codelldb en Mason, con fallback a PATH
-          command = vim.fn.exepath("codelldb") ~= "" 
-            and vim.fn.exepath("codelldb")
-            or vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+          command = (function()
+            local codelldb_path = vim.fn.exepath("codelldb")
+            return codelldb_path ~= "" and codelldb_path
+              or vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+          end)(),
           args = { "--port", "${port}" },
         },
       }
@@ -125,10 +127,13 @@ return {
               return venv .. "/bin/python"
             end
             -- Intenta encontrar python3 en PATH
-            if vim.fn.executable("python3") == 1 then
-              return "python3"
-            elseif vim.fn.executable("python") == 1 then
-              return "python"
+            local python3_path = vim.fn.exepath("python3")
+            if python3_path ~= "" then
+              return python3_path
+            end
+            local python_path = vim.fn.exepath("python")
+            if python_path ~= "" then
+              return python_path
             end
             -- Fallback para sistemas Unix
             return "/usr/bin/python3"
