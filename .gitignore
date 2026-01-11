@@ -1,0 +1,10 @@
+.cache/
+local/
+state/
+swap/
+undo/
+shada/
+session/
+log/
+*.log
+*.tmp
