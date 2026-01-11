@@ -27,17 +27,3 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
--- Grupo para format-on-save (integración con conform.nvim)
-local format_group = vim.api.nvim_create_augroup("FormatOnSave", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = format_group,
-  pattern = "*",
-  desc = "Formatear archivo al guardar con conform.nvim si está disponible",
-  callback = function(args)
-    -- Intenta usar conform.nvim si está disponible
-    local conform_ok, conform = pcall(require, "conform")
-    if conform_ok then
-      conform.format({ bufnr = args.buf, lsp_fallback = true })
-    end
-  end,
-})

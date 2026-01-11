@@ -67,7 +67,10 @@ return {
         type = "server",
         port = "${port}",
         executable = {
-          command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+          -- Intenta encontrar codelldb en Mason, con fallback a PATH
+          command = vim.fn.exepath("codelldb") ~= "" 
+            and vim.fn.exepath("codelldb")
+            or vim.fn.stdpath("data") .. "/mason/bin/codelldb",
           args = { "--port", "${port}" },
         },
       }
@@ -88,11 +91,26 @@ return {
       dap.configurations.c = dap.configurations.cpp
 
       -- Configuración para Python con debugpy
-      dap.adapters.python = {
-        type = "executable",
-        command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
-        args = { "-m", "debugpy.adapter" },
-      }
+      dap.adapters.python = function(callback, config)
+        -- Intenta encontrar el adaptador de debugpy en Mason
+        local mason_registry_ok, mason_registry = pcall(require, "mason-registry")
+        if mason_registry_ok and mason_registry.is_installed("debugpy") then
+          local debugpy_pkg = mason_registry.get_package("debugpy")
+          local debugpy_path = debugpy_pkg:get_install_path() .. "/venv/bin/python"
+          callback({
+            type = "executable",
+            command = debugpy_path,
+            args = { "-m", "debugpy.adapter" },
+          })
+        else
+          -- Fallback: busca debugpy en PATH
+          callback({
+            type = "executable",
+            command = "python3",
+            args = { "-m", "debugpy.adapter" },
+          })
+        end
+      end
 
       dap.configurations.python = {
         {
@@ -106,6 +124,13 @@ return {
             if venv then
               return venv .. "/bin/python"
             end
+            -- Intenta encontrar python3 en PATH
+            if vim.fn.executable("python3") == 1 then
+              return "python3"
+            elseif vim.fn.executable("python") == 1 then
+              return "python"
+            end
+            -- Fallback para sistemas Unix
             return "/usr/bin/python3"
           end,
         },
