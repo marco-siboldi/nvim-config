@@ -14,7 +14,8 @@ return {
         type = "server",
         port = "${port}",
         executable = {
-          command = vim.fn.stdpath("data") .. "/mason/bin/codelldb",
+          -- Mason instala codelldb en diferentes ubicaciones según el OS
+          command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
           args = { "--port", "${port}" },
         },
       }
@@ -37,6 +38,7 @@ return {
       -- Configurar adaptador debugpy (Python)
       dap.adapters.python = {
         type = "executable",
+        -- Mason instala debugpy en diferentes ubicaciones según el OS
         command = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python",
         args = { "-m", "debugpy.adapter" },
       }

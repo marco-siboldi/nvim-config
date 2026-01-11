@@ -20,7 +20,7 @@ return {
           "bashls",
           "jsonls",
           "yamlls",
-          "cmake",
+          "neocmake",     -- cmake language server
           "jdtls",
         },
         automatic_installation = true,

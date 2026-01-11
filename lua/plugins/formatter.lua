@@ -7,7 +7,7 @@ return {
       c = { "clang_format" },
       cpp = { "clang_format" },
       cmake = { "cmake_format" },
-      python = { "ruff_format", "black", "isort" },
+      python = { "ruff_format" },  -- ruff_format maneja formateo e imports
       lua = { "stylua" },
     },
     -- format_on_save se maneja via autocmd en autocmds.lua

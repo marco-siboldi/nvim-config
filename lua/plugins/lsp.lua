@@ -64,7 +64,7 @@ return {
     vim.lsp.config("bashls", { capabilities = capabilities })
     vim.lsp.config("jsonls", { capabilities = capabilities })
     vim.lsp.config("yamlls", { capabilities = capabilities })
-    vim.lsp.config("cmake", { capabilities = capabilities })
+    vim.lsp.config("neocmake", { capabilities = capabilities })
     -- Preparación para jdtls (se configurará manualmente después)
 
     vim.lsp.enable("lua_ls")
@@ -74,6 +74,6 @@ return {
     vim.lsp.enable("bashls")
     vim.lsp.enable("jsonls")
     vim.lsp.enable("yamlls")
-    vim.lsp.enable("cmake")
+    vim.lsp.enable("neocmake")
   end,
 }
