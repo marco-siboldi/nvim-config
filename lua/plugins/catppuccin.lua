@@ -16,7 +16,7 @@ return {
         nvimtree = true,
         mason = true,
       },
-      -- Opcional: overrides aproximando tu paleta “portena_milonga”
+      -- “portena_milonga”
       color_overrides = {
         mocha = {
           base = "#2f241d",
