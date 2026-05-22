@@ -1,11 +1,10 @@
 return {
   {
     "stevearc/conform.nvim",
-    -- event = 'BufWritePre', -- uncomment for format on save
+    event = { "BufWritePre" },
     opts = require "configs.conform",
   },
 
-  -- These are some examples, uncomment them if you want to see them work!
   {
     "neovim/nvim-lspconfig",
     config = function()
@@ -13,16 +12,33 @@ return {
     end,
   },
 
-  -- test new blink
-  -- { import = "nvchad.blink.lazyspec" },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "vim", "lua", "vimdoc",
+        "c", "cpp", "python", "cmake",
+      },
+    },
+  },
 
-  -- {
-  -- 	"nvim-treesitter/nvim-treesitter",
-  -- 	opts = {
-  -- 		ensure_installed = {
-  -- 			"vim", "lua", "vimdoc",
-  --      "html", "css"
-  -- 		},
-  -- 	},
-  -- },
+  -- CMake integration
+  {
+    "Civitasv/cmake-tools.nvim",
+    lazy = false,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {
+      cmake_build_directory = "build/${variant:buildType}",
+      cmake_build_directory_prefix = "linux-",
+      cmake_generate_options = { "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON" },
+      cmake_executor = {
+        name = "terminal",
+        opts = { split_direction = "horizontal", split_size = 11 },
+      },
+      cmake_runner = {
+        name = "terminal",
+        opts = { split_direction = "horizontal", split_size = 11 },
+      },
+    },
+  },
 }

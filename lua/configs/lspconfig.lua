@@ -1,6 +1,23 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls" }
-vim.lsp.enable(servers)
+vim.lsp.config("basedpyright", {
+  settings = {
+    basedpyright = {
+      analysis = {
+        typeCheckingMode = "basic",
+        diagnosticMode = "openFilesOnly",
+        autoImportCompletions = true,
+        useLibraryCodeForTypes = true,
+      },
+    },
+  },
+})
 
--- read :h vim.lsp.config for changing options of lsp servers 
+vim.lsp.config("ruff", {
+  on_attach = function(client)
+    client.server_capabilities.hoverProvider = false
+  end,
+})
+
+local servers = { "clangd", "basedpyright", "ruff" }
+vim.lsp.enable(servers)
